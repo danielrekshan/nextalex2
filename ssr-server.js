@@ -9,10 +9,26 @@ app.prepare()
 .then(() => {
   const server = express()
     
+  
+
+  server.get('/read/:id', (req, res) => {
+    // Dev notes: here is proof of concept for getting hostname into the app
+    let hostname = "TESTING"
+    if (req.subdomains) {
+      hostname = req.subdomains[0];
+    }
+
+    const actualPage = '/reading'
+    const queryParams = { 
+      id: req.params.id,
+      hostname: hostname
+    } 
+    app.render(req, res, actualPage, queryParams)
+  }) 
   server.get('*', (req, res) => {
     return handle(req, res)
   })
-    
+      
   server.listen(3000, (err) => {
     if (err) throw err
     console.log('> Ready on http://localhost:3000')
